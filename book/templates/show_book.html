@@ -2,6 +2,7 @@
 {% block content %}
 <h1 class="text-4xl text-purple-700 font-bold text-center my-5">All Books</h1>
 <div class="w-11/12 mx-auto">
+    {% if data %}
     <div class="overflow-x-auto">
         <table class="table">
           <!-- head -->
@@ -25,11 +26,14 @@
                 <td>{{item.category}}</td>
                 <td>{{item.first_pub}}</td>
                 <td>{{item.last_pub}}</td>
-                <td><a href="{% url 'edit_book' id=item.id %}" class="text-xs btn btn-info">Edit</a> <button class="text-xs btn btn-error">Delete</button> </td>
+                <td><a href="{% url 'edit_book' id=item.id %}" class="text-xs btn btn-info">Edit</a> <a class="text-xs btn btn-error" href="{% url 'delete_book' id=item.id %}">Delete</a> </td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
     </div>
+    {% else %}
+    <h1 class="text-5xl text-red-600 text-center">Now Data Available</h1>
+    {% endif %}
 </div>
 {% endblock %}
