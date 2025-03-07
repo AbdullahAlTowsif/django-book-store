@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from book.forms import BookStoreForm
 from book.models import BookStoreModel
 # Create your views here.
@@ -10,8 +10,9 @@ def store_book(request):
     if request.method == 'POST':
         book = BookStoreForm(request.POST)
         if book.is_valid():
-            book.save(commit=False)
+            book.save()
             print(book.cleaned_data)
+            return redirect('show_books')
     else:
         book = BookStoreForm()
     return render(request, 'store_book.html', {'form': book})

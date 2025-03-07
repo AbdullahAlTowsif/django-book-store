@@ -3,7 +3,7 @@
 {% block content %}
 <div class="w-1/2 mx-auto">
     <h1 class="text-4xl text-purple-600 font-bold my-5">Welcome to Django Bookstore Management</h1>
-    <form action="" method="post">
+    <form method="post">
         {% csrf_token %}
         {{form|crispy}}
         <button class="btn btn-primary">Submit</button>
