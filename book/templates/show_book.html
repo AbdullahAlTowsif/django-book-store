@@ -13,6 +13,7 @@
               <th>Category</th>
               <th>First Publication</th>
               <th>Last Publication</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -24,6 +25,7 @@
                 <td>{{item.category}}</td>
                 <td>{{item.first_pub}}</td>
                 <td>{{item.last_pub}}</td>
+                <td><a href="{% url 'edit_book' id=item.id %}" class="text-xs btn btn-info">Edit</a> <button class="text-xs btn btn-error">Delete</button> </td>
             </tr>
             {% endfor %}
           </tbody>
