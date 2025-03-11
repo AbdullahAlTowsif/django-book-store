@@ -5,6 +5,7 @@
     <h1 class="text-4xl text-purple-600 font-bold my-5">Welcome to Django Bookstore Management</h1>
     <form method="post">
         {% csrf_token %}
+        {% comment %} By using Form View We don't need to define the form: it's by default {% endcomment %}
         {{form|crispy}}
         <button class="btn btn-primary">Submit</button>
     </form>

@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from book.forms import BookStoreForm
 from book.models import BookStoreModel
 from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic.edit import FormView, CreateView
+from django.urls import reverse_lazy
+from django.http import HttpResponse
 # Create your views here.
 
 # function based view
@@ -17,16 +20,35 @@ class MyTemplateView(TemplateView):
         context.update(kwargs)
         return context
 
-def store_book(request):
-    if request.method == 'POST':
-        book = BookStoreForm(request.POST)
-        if book.is_valid():
-            book.save()
-            print(book.cleaned_data)
-            return redirect('show_books')
-    else:
-        book = BookStoreForm()
-    return render(request, 'store_book.html', {'form': book})
+# def store_book(request):
+#     if request.method == 'POST':
+#         book = BookStoreForm(request.POST)
+#         if book.is_valid():
+#             book.save()
+#             print(book.cleaned_data)
+#             return redirect('show_books')
+#     else:
+#         book = BookStoreForm()
+#     return render(request, 'store_book.html', {'form': book})
+
+# 1ST WAY TO ADD DATA BY FORM
+# class BookFormView(FormView):
+#     # we don't need to render the form. Django by default render the 'form' in FormView
+#     template_name = 'store_book.html'
+#     form_class = BookStoreForm
+#     # success_url = '/show_books/'
+#     # success_url = reverse_lazy('show_books')
+#     def form_valid(self, form):
+#         print(form.cleaned_data)
+#         form.save() # to save in database
+#         return redirect('show_books')
+
+# 2ND WAY TO ADD DATA 
+class BookFormView(CreateView):
+    model = BookStoreModel
+    template_name = 'store_book.html'
+    form_class = BookStoreForm
+    success_url = reverse_lazy('show_books')
 
 # def show_books(request):
 #     book = BookStoreModel.objects.all()
@@ -36,7 +58,7 @@ class BookListView(ListView):
     model = BookStoreModel
     template_name = 'show_book.html'
     context_object_name = 'data'
-    ordering = ['author']
+    # ordering = ['author']
     # filtering in 2 way
     
     # 1st way
