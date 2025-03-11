@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from book.forms import BookStoreForm
 from book.models import BookStoreModel
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 # Create your views here.
 
 # function based view
@@ -59,6 +59,12 @@ class BookListView(ListView):
         else:
             template_name = self.template_name
         return [template_name]
+
+class BookDetailsView(DetailView):
+    model = BookStoreModel
+    template_name = 'book_details.html'
+    context_object_name = 'item'
+    pk_url_kwarg = 'id'
 
 def edit_book(request, id):
     book = BookStoreModel.objects.get(pk = id)
