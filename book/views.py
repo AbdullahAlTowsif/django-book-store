@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from book.forms import BookStoreForm
 from book.models import BookStoreModel
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 # Create your views here.
 
 # function based view
@@ -28,9 +28,37 @@ def store_book(request):
         book = BookStoreForm()
     return render(request, 'store_book.html', {'form': book})
 
-def show_books(request):
-    book = BookStoreModel.objects.all()
-    return render(request, 'show_book.html', {'data': book})
+# def show_books(request):
+#     book = BookStoreModel.objects.all()
+#     return render(request, 'show_book.html', {'data': book})
+
+class BookListView(ListView):
+    model = BookStoreModel
+    template_name = 'show_book.html'
+    context_object_name = 'data'
+    ordering = ['author']
+    # filtering in 2 way
+    
+    # 1st way
+    # def get_queryset(self):
+    #     return BookStoreModel.objects.filter(author='Jhankar Mahbub')
+    
+    # 2nd way
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context = {'data': BookStoreModel.objects.filter(author='Towsif')}
+    #     context = {'data': BookStoreModel.objects.order_by('author')}
+    #     return context
+    
+    # conditional template view
+    def get_template_names(self):
+        if self.request.user.is_superuser:
+            template_name = 'superuser.html'
+        elif self.request.user.is_staff:
+            template_name = 'staff.html'
+        else:
+            template_name = self.template_name
+        return [template_name]
 
 def edit_book(request, id):
     book = BookStoreModel.objects.get(pk = id)
