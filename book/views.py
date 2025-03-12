@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from book.forms import BookStoreForm
 from book.models import BookStoreModel
 from django.views.generic import TemplateView, ListView, DetailView
-from django.views.generic.edit import FormView, CreateView
+from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 # Create your views here.
@@ -88,16 +88,29 @@ class BookDetailsView(DetailView):
     context_object_name = 'item'
     pk_url_kwarg = 'id'
 
-def edit_book(request, id):
-    book = BookStoreModel.objects.get(pk = id)
-    form = BookStoreForm(instance=book)
-    if request.method == 'POST':
-        form = BookStoreForm(request.POST, instance=book)
-        if form.is_valid():
-            form.save()
-            return redirect('show_books')
-    return render(request, 'store_book.html', {'form': form})
+# def edit_book(request, id):
+#     book = BookStoreModel.objects.get(pk = id)
+#     form = BookStoreForm(instance=book)
+#     if request.method == 'POST':
+#         form = BookStoreForm(request.POST, instance=book)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('show_books')
+#     return render(request, 'store_book.html', {'form': form})
 
-def delete_book(request, id):
-    book = BookStoreModel.objects.get(pk=id).delete()
-    return redirect('show_books')
+
+class BookUpdateView(UpdateView):
+    model = BookStoreModel
+    template_name = 'store_book.html'
+    form_class = BookStoreForm
+    success_url = reverse_lazy('show_books')
+
+
+# def delete_book(request, id):
+#     book = BookStoreModel.objects.get(pk=id).delete()
+#     return redirect('show_books')
+
+class DeleteBookView(DeleteView):
+    model = BookStoreModel
+    template_name = 'delete_confirmation.html'
+    success_url = reverse_lazy('show_books')
